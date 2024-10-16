@@ -16,9 +16,15 @@ app.use(express.static(path.join(__dirname, '../../front-end/public/')));
 
 // Send the HTML file as a response to the root route
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));  // Fixing the path issue
+    res.sendFile(path.join(__dirname, "../../front-end/public/index.html"))
 });
 
+app.get("/login", (req, res) => {
+	res.sendFile(path.join(__dirname, "../../front-end/public/login.html"))
+})
+app.get("/register", (req, res) => {
+	res.sendFile(path.join(__dirname, "../../front-end/public/register.html"))
+})
 
 
 app.listen(3003, () => {
