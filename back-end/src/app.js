@@ -8,16 +8,23 @@ const path = require("path")
 require("dotenv").config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
-app.use(express.static("public"))
 
 // Serve static files from the 'front-end/public' folder
-app.use(express.static(path.join(__dirname, '../../front-end/public/html')));
+app.use(express.static(path.join(__dirname, '../../front-end/public/')));
 
+// console.log(path.join(__dirname, '../../front-end/public'));
+
+// Send the HTML file as a response to the root route
 app.get("/", (req, res) => {
-	res.sendFile(__dirname + '/index.html');
+    res.sendFile(path.join(__dirname, "../../front-end/public/index.html"))
+});
+
+app.get("/login", (req, res) => {
+	res.sendFile(path.join(__dirname, "../../front-end/public/login.html"))
 })
-
-
+app.get("/register", (req, res) => {
+	res.sendFile(path.join(__dirname, "../../front-end/public/register.html"))
+})
 
 
 app.listen(3003, () => {
