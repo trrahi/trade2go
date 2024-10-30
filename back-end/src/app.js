@@ -9,12 +9,15 @@ require("dotenv").config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-// Serve static files from the 'front-end/public' folder
+let PORT = process.env.PORT
+
+const MONGODB_URI = process.env.NODE_ENV === "test" ? process.env.TEST_MONGODB_URI : process.env.MONGODB_URI
+
+// Determines a directory where static files can be served from
 app.use(express.static(path.join(__dirname, '../../front-end/public/')));
 
-// console.log(path.join(__dirname, '../../front-end/public'));
 
-// Send the HTML file as a response to the root route
+// ROUTES FOR get REQUESTS
 app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "../../front-end/public/index.html"))
 });
@@ -27,6 +30,7 @@ app.get("/register", (req, res) => {
 })
 
 
-app.listen(3003, () => {
-    console.log(`Sovellus käynnissä portissa 3003`);
+
+app.listen(PORT, () => {
+    console.log(`Sovellus käynnissä portissa ${PORT}`);
 });
