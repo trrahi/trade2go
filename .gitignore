@@ -2,4 +2,5 @@
 .env
 *.pdf
 *.docx
+*.rest
 node_modules/
