@@ -1,4 +1,6 @@
-console.log("testi")
+import axios from "axios"
+
+console.log("Testi");
 
 // Login form submit
 document.getElementById("loginForm")?.addEventListener("submit", function (e) {
@@ -27,27 +29,41 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 		})
 })
 
+
+
 // Register form submit
-document.getElementById("registerForm")?.addEventListener("submit", function (e) {
+const registerButton = document.getElementById("registerButton")
+
+registerButton.addEventListener("click", function (e) {
 	e.preventDefault()
+	console.log(e);
+	console.log("click happened");
 
-	const firstName = document.getElementById("firstName").value
-	const lastName = document.getElementById("lastName").value
-	const email = document.getElementById("email").value
-	const password = document.getElementById("password").value
+	// const userName = document.getElementById("userName").value
+	// const firstName = document.getElementById("firstName").value
+	// const lastName = document.getElementById("lastName").value
+	// const email = document.getElementById("email").value
+	// const phoneNumber = document.getElementById("phoneNumber").value
+	// const password = document.getElementById("password").value
 
-	axios
-		.post("http://localhost:3003/api/register", {
-			firstName: firstName,
-			lastName: lastName,
-			email: email,
-			password: password
-		})
-		.then((response) => {
-			// Rekisteröinti onnistui, ohjaa kirjautumissivulle
-			window.location.href = "login.html"
-		})
-		.catch((error) => {
-			document.getElementById("registerError").textContent = "Registration failed. Try again."
-		})
+	// console.log(userName);
+
+	// axios
+	// 	.post("http://localhost:3003/api/users", {
+	// 		userName: userName,
+	// 		firstName: firstName,
+	// 		lastName: lastName,
+	// 		email: email,
+	// 		phoneNumber: phoneNumber,
+	// 		password: password
+			
+	// 	})
+	// 	.then((response) => {
+	// 		console.log("perse");
+	// 		// Rekisteröinti onnistui, ohjaa kirjautumissivulle
+	// 		window.location.href = "login.html"
+	// 	})
+	// 	.catch((error) => {
+	// 		document.getElementById("registerError").textContent = "Registration failed. Try again."
+	// 	})
 })

@@ -1,5 +1,6 @@
 // HOITAA KAIKKI localhsot:3003/api/users TULEVAT PYYNNÖT. KÄYTETÄÄN KAYTTÄJIEN HALLINTAAN ESIM: UUDEN KÄYTTÄJNÄN LUOMISEEN TAI KAIKKIEN KÄYTTÄJIEN TIETOJEN HAKEMISEEN.
 const bcrypt = require("bcrypt")
+const path = require("path")
 const usersRouter = require("express").Router()
 const User = require("../models/user")
 const Item = require("../models/item")
@@ -17,9 +18,10 @@ usersRouter.get("/", async (req, res) => {
 
 // TIEDOKSI FRONT-ENDIIN: LÄHETÄKÄÄ POST PYYNTÖ /api/users
 usersRouter.post("/", async (req, res) => {
-	const { userName, firstName, lastName, emailAddress, phoneNumber, password } = req.body
+	console.log("request got");
+	const { userName, firstName, lastName, email, phoneNumber, password } = req.body
 
-	const doesUserExist = await User.findOne({emailAddress: emailAddress})
+	const doesUserExist = await User.findOne({emailAddress: email})
 
 	if (doesUserExist) {
 		return res.status(401).json({error: "Email already in use! 💀"})
@@ -32,14 +34,14 @@ usersRouter.post("/", async (req, res) => {
 		userName,
 		firstName,
 		lastName,
-		emailAddress,
+		email,
 		phoneNumber,
 		passwordHash
 	})
 
 	const savedUser = await newUser.save()
 
-	res.status(201).json(savedUser)
+	res.status(201).sendFile(path.join(__dirname, "../../../front-end/public/login.html"))
 })
 
 module.exports = usersRouter

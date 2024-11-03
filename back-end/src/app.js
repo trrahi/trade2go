@@ -15,6 +15,7 @@ const MONGODB_URI = process.env.MONGODB_URI
 
 // Determines a directory where static files can be served from
 app.use(express.static(path.join(__dirname, "../../front-end/public/")))
+
 // ROUTES FOR get REQUESTS
 app.get("/", (req, res) => {
 	res.sendFile(path.join(__dirname, "../../front-end/public/index.html"))
