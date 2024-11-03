@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "userName": "Ron the Recycler",
+    "firstName": "Ron",
+    "lastName": "Rivera",
+    "emailAddress": "ron.rivera@sahkoposti.fi",
+    "phoneNumber": "123456789",
+    "password": "vanhasalasana1"
+}

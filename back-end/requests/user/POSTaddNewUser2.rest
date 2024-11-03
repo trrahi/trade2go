@@ -1,0 +1,11 @@
+POST http://localhost:3003/api/users
+Content-Type: application/json
+
+{
+    "userName": "Kimmo Kierrätys",
+    "firstName": "Kimmo",
+    "lastName": "Karttunen",
+    "emailAddress": "kimmo.karttunena@sahkoposti.fi",
+    "phoneNumber": "123456789",
+    "password": "heikkosalasana1"
+}

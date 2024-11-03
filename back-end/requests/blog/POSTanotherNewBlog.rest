@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InBla3NpIiwiaWQiOiI2NmNmNGFhOTNiMmU4ZjVlMjhmZGFhNGEiLCJpYXQiOjE3MjUwOTQ1Mzl9.s2sAwixjL_r_ohQXsvvOtNw5rhhWs5rY0AJEE9jWBTA
+
+{
+    "title": "Blogi 2: How to drink beer",
+    "author": "General Sandels",
+    "url": "anotherThing.com",
+    "likes": 1235
+}
