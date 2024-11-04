@@ -10,15 +10,15 @@ usersRouter.get("/", async (req, res) => {
 	res.json(users)
 })
 
-// usersRouter.delete("/", async (req, res) => {
-// 	await User.deleteMany({})
-// 	res.send("cool!")
-// })
+usersRouter.delete("/", async (req, res) => {
+	await User.deleteMany({})
+	res.send("cool!")
+})
 
 
 // TIEDOKSI FRONT-ENDIIN: LÄHETÄKÄÄ POST PYYNTÖ /api/users
 usersRouter.post("/", async (req, res) => {
-	console.log("request got");
+	console.log("POST req recieved to /api/users");
 	const { userName, firstName, lastName, email, phoneNumber, password } = req.body
 
 	const doesUserExist = await User.findOne({emailAddress: email})
@@ -41,7 +41,7 @@ usersRouter.post("/", async (req, res) => {
 
 	const savedUser = await newUser.save()
 
-	res.status(201).sendFile(path.join(__dirname, "../../../front-end/public/login.html"))
+	res.status(201).json(savedUser)
 })
 
 module.exports = usersRouter
