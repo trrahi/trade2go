@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trade2Go</title>
-    <script type="./module" src="script.js" defer></script>
-</head>
-<body>
-
-<body>
-
-    <div class="login-container">
-        <h2>Rekisteröidy Trade2Go appiin! 💯</h2>
-        <form >
-            <!-- User name -->
-            <label for="userName">Username:</label>
-            <input type="text" id="userName" name="userName" required>
-            <br>
-            <br>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Trade2Go</title>
+    </head>
+    <body>
+        
+        <body>
             
-            <!-- FirstName -->
-            <label for="firstName">First Name:</label>
-            <input type="text" id="firstName" name="firstName" required>
-            <br>
-            <br>
+            <div class="login-container">
+                <h2>Rekisteröidy Trade2Go appiin! 💯</h2>
+                <form id="registerForm">
+                    <!-- User name -->
+                    <label for="userName">Username:</label>
+                    <input type="text" id="userName" name="userName" required>
+                    <br>
+                    <br>
+                    
+                    <!-- FirstName -->
+                    <label for="firstName">First Name:</label>
+                    <input type="text" id="firstName" name="firstName" required>
+                    <br>
+                    <br>
+                    
+                    <!-- LastName -->
+                    <label for="lastName">Last Name:</label>
+                    <input type="text" id="lastName" name="lastName" required>
+                    <br><br>
+                    
+                    <!-- EmailAddress -->
+                    <label for="email">Email Address:</label>
+                    <input type="email" id="email" name="email" required>
+                    <br><br>
+                    
+                    <!-- PhoneNumber -->
+                    <label for="phoneNumber">Phone Number:</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" required>
+                    <br><br>
+                    
+                    <!-- Password -->
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <br><br>
+                    
+                    
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" id="registerButton">Login</button>
+                </form>
+            </div>
             
-            <!-- LastName -->
-            <label for="lastName">Last Name:</label>
-            <input type="text" id="lastName" name="lastName" required>
-            <br><br>
-
-            <!-- EmailAddress -->
-            <label for="emailAddress">Email Address:</label>
-            <input type="email" id="email" name="email" required>
-            <br><br>
-
-            <!-- PhoneNumber -->
-            <label for="phoneNumber">Phone Number:</label>
-            <input type="tel" id="phoneNumber" name="phoneNumber" required>
-            <br><br>
-
-            <!-- Password -->
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <br><br>
-
-
-
-            <!-- Submit Button -->
-            <button id="registerButton">Login</button>
-        </form>
-    </div>
-
-</body>
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.7.7/dist/axios.min.js"></script>
+        <script src="script.js" defer></script>
+    </body>
     
 </body>
 </html>

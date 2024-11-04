@@ -32,10 +32,12 @@ app.get("/register", (req, res) => {
 
 // Sisäiset moduulit
 const usersRouter = require("./controllers/user")
+const loginRouter = require("./controllers/login")
 
 
 // Middleware käyttöön
 app.use("/api/users", usersRouter)
+app.use("/api/login", loginRouter)
 
 
 
