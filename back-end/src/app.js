@@ -7,11 +7,9 @@ require("dotenv").config()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-
 // Ympäristömuuttujat .env:istä
 const PORT = process.env.PORT
 const MONGODB_URI = process.env.MONGODB_URI
-
 
 // Determines a directory where static files can be served from
 app.use(express.static(path.join(__dirname, "../../front-end/public/")))
@@ -28,23 +26,15 @@ app.get("/register", (req, res) => {
 	res.sendFile(path.join(__dirname, "../../front-end/public/register.html"))
 })
 
-
-
 // Sisäiset moduulit
 const usersRouter = require("./controllers/user")
 const loginRouter = require("./controllers/login")
 const itemsRouter = require("./controllers/items")
 
-
 // Middleware käyttöön
 app.use("/api/users", usersRouter)
 app.use("/api/login", loginRouter)
 app.use("/api/items", itemsRouter)
-
-
-
-
-
 
 // Yhdistä Mongooseen
 mongoose.set("strictQuery", false)
