@@ -6,7 +6,7 @@ const User = require("../models/user")
 const getTokenFrom = require("../utils/getToken")
 
 
-
+console.log("Test, delete this console.log");
 // itemsRouter.delete("/all", async (req, res) => {
 // 	await Item.deleteMany({})
 // 	res.send("Wiped the item DB lmao 💀")
