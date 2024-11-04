@@ -9,10 +9,10 @@ usersRouter.get("/", async (req, res) => {
 	res.json(users)
 })
 
-usersRouter.delete("/", async (req, res) => {
-	await User.deleteMany({})
-	res.send("Wiped the user DB lmao 💀")
-})
+// usersRouter.delete("/", async (req, res) => {
+// 	await User.deleteMany({})
+// 	res.send("Wiped the user DB lmao 💀")
+// })
 
 
 // TIEDOKSI FRONT-ENDIIN: LÄHETÄKÄÄ POST PYYNTÖ /api/users
