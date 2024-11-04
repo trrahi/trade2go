@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
 	userName: String,
 	firstName: String,
 	lastName: String,
-	emailAddress: String,
+	email: String,
 	phoneNumber: String,
 	passwordHash: String,
 	items: [
@@ -20,6 +20,7 @@ userSchema.set("toJSON", {
 		returnedObject.id = returnedObject._id.toString()
 		delete returnedObject._id
 		delete returnedObject.__v
+		// delete returnedObject.phoneNumber
 		delete returnedObject.passwordHash
 	}
 })
