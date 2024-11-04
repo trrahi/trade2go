@@ -6,11 +6,11 @@ const User = require("../models/user")
 const getTokenFrom = require("../utils/getToken")
 
 
-
-itemsRouter.delete("/all", async (req, res) => {
-	await Item.deleteMany({})
-	res.send("Wiped the item DB lmao 💀")
-})
+console.log("Test, delete this console.log");
+// itemsRouter.delete("/all", async (req, res) => {
+// 	await Item.deleteMany({})
+// 	res.send("Wiped the item DB lmao 💀")
+// })
 
 itemsRouter.get("/", async (req, res) => {
 	const items = await Item.find({}).populate("user", { userName: 1, phoneNumber: 1 })
