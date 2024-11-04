@@ -11,7 +11,7 @@ usersRouter.get("/", async (req, res) => {
 
 usersRouter.delete("/", async (req, res) => {
 	await User.deleteMany({})
-	res.send("Wiped the DB lmao 💀")
+	res.send("Wiped the user DB lmao 💀")
 })
 
 
