@@ -4,13 +4,15 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Trade2Go</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="script.js"  defer></script>
     </head>
     <body>
         
         <body>
             
             <div class="login-container">
-                <h2>Rekisteröidy Trade2Go appiin! 💯</h2>
+                <h2>Register to Trade2Go</h2>
                 <form id="registerForm">
                     <!-- User name -->
                     <label for="userName">Username:</label>
@@ -47,7 +49,11 @@
                     
                     
                     <!-- Submit Button -->
-                    <button type="submit" id="registerButton">Login</button>
+                    <button type="submit" id="registerButton">Register</button>
+                    <!-- Nappi vasempaan yläkulmaan -->
+                    <div class="back-button">
+                    <button onclick="window.location.href='index.html'">Back to Home</button>
+                    </div>
                 </form>
             </div>
             
