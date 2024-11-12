@@ -3,6 +3,7 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const path = require("path")
+const authMiddleware = require("./middleware/authMiddleware.js")
 require("dotenv").config()
 
 app.use(express.json())
@@ -37,6 +38,10 @@ app.get("/login", (req, res) => {
 
 app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "../../front-end/public/register.html"))
+})
+
+app.get("/dashboard", authMiddleware, (req, res) => {
+    res.sendFile(path.join(__dirname, "../../front-end/public/dashboard.html"))
 })
 
 // Sisäiset moduulit

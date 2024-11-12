@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+</head>
+<body>
+  <h1>Welcome to your Dashboard!</h1>
+  <p>This page is accessible only if you are logged in.</p>
+  <a href="/login.html">Logout</a>
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const token = localStorage.getItem("token");
+    
+        // Jos token puuttuu, ohjataan käyttäjä takaisin kirjautumissivulle
+        if (!token) {
+            alert("Sinun täytyy kirjautua sisään päästäksesi tälle sivulle.");
+            window.location.href = "login.html";
+        }
+    
+        // Voit lisätä lisätarkistuksen tekemällä pyynnön back-endiin tokenin kelvollisuuden tarkistamiseksi
+        axios
+            .get("http://localhost:3003/api/verifyToken", {
+                headers: { Authorization: `Bearer ${token}` }
+            })
+            .then((response) => {
+                // Token on kelvollinen, jatketaan normaalisti
+                console.log("Token valid, accessing dashboard");
+            })
+            .catch((error) => {
+                // Jos token ei ole kelvollinen, ohjaa käyttäjä kirjautumissivulle
+                alert("Sinun täytyy kirjautua sisään päästäksesi tälle sivulle.");
+                window.location.href = "login.html";
+            });
+    });
+    </script>
+    
+</body>
+
+
+</html>
