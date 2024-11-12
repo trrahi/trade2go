@@ -21,7 +21,7 @@ loginRouter.post("/", async (req, res) => {
 		username: user.email,
 		id: user._id
 	}
-
+	//token luodaan tässä moduulissa ja lähetetään front-endiin. frontti tallentaa sen local storageen.
 	const token = jwt.sign(userForToken, process.env.SECRET)
 
 	res.status(200).send({

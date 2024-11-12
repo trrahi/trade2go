@@ -39,6 +39,7 @@ app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "../../front-end/public/register.html"))
 })
 
+
 // Sisäiset moduulit
 const usersRouter = require("./controllers/user")
 const loginRouter = require("./controllers/login")
