@@ -41,7 +41,7 @@ app.get("/register", (req, res) => {
 })
 
 app.get("/dashboard", authMiddleware, (req, res) => {
-    res.sendFile(path.join(__dirname, "../../front-end/public/dashboard.html"))
+    res.sendFile(path.join(__dirname, "../../front-end/public/itembox.html"))
 })
 
 // Sisäiset moduulit
