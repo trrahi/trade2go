@@ -41,14 +41,14 @@ app.get("/register", (req, res) => {
 })
 
 app.get("/dashboard", authMiddleware, (req, res) => {
-    res.sendFile(path.join(__dirname, "../../front-end/public/dashboard.html"))
+    res.sendFile(path.join(__dirname, "../../front-end/public/itembox.html"))
 })
 
 // Sisäiset moduulit
 const usersRouter = require("./controllers/user")
 const loginRouter = require("./controllers/login")
 const itemsRouter = require("./controllers/items")
-
+//
 // Middleware käyttöön
 app.use("/api/users", usersRouter)
 app.use("/api/login", loginRouter)

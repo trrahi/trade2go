@@ -24,7 +24,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 			localStorage.setItem("userName", userName)
 
 			// Ohjaa käyttäjä etusivulle
-			window.location.href = "dashboard.html"
+			window.location.href = "itembox.html"
 		})
 		.catch((error) => {
 			document.getElementById("loginError").textContent = "Invalid login credentials."
