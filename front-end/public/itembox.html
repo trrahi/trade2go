@@ -5,93 +5,44 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Item Trading Website</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="itembox.css">
     <style>
-        /* Custom styling for green buttons */
-        .btn-green {
-            background-color: #28a745;
-            color: white;
-        }
 
-        .btn-green:hover {
-            background-color: #218838;
-        }
-
-        /* Set image placeholder style */
-       /* Teams testi */
-        .card-img-top {
-            background-color: #e0e0e0; /* Light gray background */
-            width: 100%;
-            height: 150px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #888;
-            font-size: 1.2em;
-            font-weight: bold;
-            border-radius: 10px 10px 0 0;
-        }
-
-        /* Item grid layout */
-        .item-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 50px;
-            justify-content: space-between;
-            padding: 50px;
-        }
-
-        /* Set each item box to take up 30% of the width */
-        .item-box {
-            width: 30%;
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            padding: 20px;
-            margin: 20px;
-        }
-        .item-box img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-        .item-grid {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            padding: 50px;
-        }
-        .btn-green {
-            background-color: #28a745;
-            color: white;
-        }
     </style>
 </head>
 <body>
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Item Trading</a>
+        <a class="navbar-brand" href="#">Vaihtoesineet</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <button class="btn btn-green nav-link" id="add-item-button">Add Item</button>
+                    <a class="nav-link" href="index.html">Etusivu</a>
                 </li>
             </ul>
         </div>
     </nav>
-    
+
+    <!-- "Add Item" button -->
+    <div class="add-item-container">
+        <button class="btn btn-green" id="add-item-button">Lisää esine</button>
+    </div>
+
+    <div class="container">
+        <div class="item-grid" id="items-container">
+            <!-- Item boxes will be inserted here -->
+        </div>
+    </div>
+
     <!-- Modal for adding a new item -->
     <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
+                    <h5 class="modal-title" id="addItemModalLabel">Lisää uusi esine</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -99,133 +50,26 @@
                 <div class="modal-body">
                     <form id="add-item-form">
                         <div class="form-group">
-                            <label for="item-name">Item Name</label>
+                            <label for="item-name">Esineen nimi</label>
                             <input type="text" class="form-control" id="item-name" required>
                         </div>
                         <div class="form-group">
-                            <label for="item-desc">Item Description</label>
+                            <label for="item-desc">Esineen kuvaus</label>
                             <textarea class="form-control" id="item-desc" required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-green">Add Item</button>
+                        <button type="submit" class="btn btn-green">Lisää esine</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
-    
-<div class="container">
-    <div class="item-grid" id="items-container">
-        <!-- Item boxes will be inserted here -->
-    </div>
-</div>
 
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-// Function to display the items
-function displayItems(items) {
-    const container = document.getElementById('items-container');
-    container.innerHTML = '';  // Clear the container before adding new items
-
-    items.forEach(item => {
-        // Create the item box container
-        const itemDiv = document.createElement('div');
-        itemDiv.classList.add('item-box');
-
-        // Create and append item name
-        const itemName = document.createElement('h3');
-        itemName.textContent = item.itemName;
-        itemDiv.appendChild(itemName);
-
-        // Create and append item description
-        const itemDesc = document.createElement('p');
-        itemDesc.textContent = item.itemDesc;
-        itemDiv.appendChild(itemDesc);
-
-        // Create and append user name
-        const userName = document.createElement('p');
-        userName.textContent = `User: ${item.user.userName}`;
-        itemDiv.appendChild(userName);
-
-        // Create and append phone number
-        const phoneNumber = document.createElement('p');
-        phoneNumber.textContent = `Phone: ${item.user.phoneNumber}`;
-        itemDiv.appendChild(phoneNumber);
-
-        // Create and append a trade button
-        const tradeBtn = document.createElement('button');
-        tradeBtn.classList.add('btn', 'btn-green');
-        tradeBtn.textContent = 'Trade';
-        tradeBtn.onclick = () => alert('Initiate trade for ' + item.itemName);
-        itemDiv.appendChild(tradeBtn);
-
-        // Append the item box to the container
-        container.appendChild(itemDiv);
-    });
-}
-
-// Function to fetch the items using Axios
-function fetchItems() {
-    axios.get('http://localhost:3003/api/items')  // Replace with your actual API URL
-        .then(response => {
-            displayItems(response.data);  // Pass the fetched items to display function
-        })
-        .catch(error => {
-            console.error('Error fetching items:', error);
-            alert('Failed to load items.');
-        });
-}
-
-
-// Call the fetchItems function to load the items on page load
-fetchItems();
-</script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    // Lisää tähän aiemmin antamani JavaScript-koodi
-    // Open the Add Item modal when the button is clicked
-    document.getElementById('add-item-button').addEventListener('click', () => {
-        $('#addItemModal').modal('show'); // Requires Bootstrap's modal JS
-    });
-
-    // Handle form submission for adding a new item
-    document.getElementById('add-item-form').addEventListener('submit', async (event) => {
-        event.preventDefault();
-
-        const itemName = document.getElementById('item-name').value;
-        const itemDesc = document.getElementById('item-desc').value;
-
-        console.log("item name:", itemName);
-        console.log("item dsec:", itemDesc);
-
-        const itemToBeAdded = {
-            itemName,
-            itemDesc,
-        };
-
-        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
-        const config = {
-            headers: { Authorization: `Bearer ${token}` },
-        };
-
-        console.log("Configin arvot:", config);
-
-
-        try {
-            await axios.post('http://localhost:3003/api/items', itemToBeAdded, config);
-            $('#addItemModal').modal('hide'); // Close the modal
-            fetchItems(); // Refresh the item list
-        } catch (error) {
-            console.error('Error adding item:', error);
-            alert('Failed to add item.');
-        }
-    });
-</script>
-</body>
-
+    <!-- Link the external JavaScript file -->
+    <script src="itembox.js"></script>
 
 </body>
 </html>

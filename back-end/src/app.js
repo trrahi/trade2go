@@ -1,6 +1,8 @@
 // Alusta Express() ja node paketit
 const express = require("express")
 const app = express()
+const cors = require('cors')
+app.use(cors())
 const mongoose = require("mongoose")
 const path = require("path")
 const authMiddleware = require("./middleware/authMiddleware.js")

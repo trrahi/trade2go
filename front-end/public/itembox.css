@@ -1,0 +1,70 @@
+    /* Center the "Add Item" button */
+    .add-item-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 30px 0;
+    }
+    
+    /* Style the "Add Item" button */
+    #add-item-button {
+        font-size: 1.5rem; /* Larger font size */
+        padding: 10px 20px; /* Bigger padding for a larger button */
+        border-radius: 8px; /* Slightly rounded corners */
+        background-color: #28a745; /* Green background */
+        color: white; /* White text */
+        border: none; /* Remove default border */
+        cursor: pointer;
+        transition: all 0.3s ease; /* Smooth hover effect */
+    }
+    
+    /* Hover effect for the button */
+    #add-item-button:hover {
+        background-color: #218838; /* Darker green on hover */
+        transform: scale(1.05); /* Slightly enlarge the button */
+    }
+    
+            /* Custom styling for green buttons */
+            .btn-green {
+                background-color: #28a745;
+                color: white;
+            }
+    
+            .btn-green:hover {
+                background-color: #218838;
+            }
+    
+            /* Center the "Add Item" button */
+            .add-item-container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin: 30px 0;
+            }
+    
+            /* Item grid layout */
+            .item-grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 50px;
+                justify-content: space-around;
+                padding: 50px;
+            }
+    
+            /* Set each item box */
+            .item-box {
+                width: 30%;
+                background-color: white;
+                border-radius: 10px;
+                box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                text-align: center;
+                padding: 20px;
+                margin: 20px;
+            }
+
+            .user-info {
+                font-size: 0.9em;
+                color: #555;
+                margin-top: 8px;
+            }
+            
