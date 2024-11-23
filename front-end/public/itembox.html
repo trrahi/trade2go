@@ -198,15 +198,21 @@ fetchItems();
         const itemName = document.getElementById('item-name').value;
         const itemDesc = document.getElementById('item-desc').value;
 
+        console.log("item name:", itemName);
+        console.log("item dsec:", itemDesc);
+
         const itemToBeAdded = {
             itemName,
             itemDesc,
         };
 
-        const token = localStorage.getItem('authToken'); // Assume token is stored in localStorage
+        const token = localStorage.getItem('token'); // Assume token is stored in localStorage
         const config = {
             headers: { Authorization: `Bearer ${token}` },
         };
+
+        console.log("Configin arvot:", config);
+
 
         try {
             await axios.post('http://localhost:3003/api/items', itemToBeAdded, config);
