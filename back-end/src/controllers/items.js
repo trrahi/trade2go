@@ -13,10 +13,14 @@ console.log("Test, delete this console.log");
 // })
 
 itemsRouter.get("/", async (req, res) => {
-	const items = await Item.find({}).populate("user", { userName: 1, phoneNumber: 1 })
-	// console.log("after GET: items: ", items);
-	res.json(items)
-})
+    try {
+        const items = await Item.find({}).populate("user", { userName: 1, email: 1 }); // Populate userName and email
+        res.json(items);
+    } catch (error) {
+        res.status(500).json({ error: "Error fetching items" });
+    }
+});
+
 
 itemsRouter.post("/", async (req, res) => {
 	console.log("In itemsRouter");
