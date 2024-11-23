@@ -69,11 +69,57 @@
 </head>
 <body>
 
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Item Trading</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-green nav-link" id="add-item-button">Add Item</button>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+    <!-- Modal for adding a new item -->
+    <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addItemModalLabel">Add New Item</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-item-form">
+                        <div class="form-group">
+                            <label for="item-name">Item Name</label>
+                            <input type="text" class="form-control" id="item-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="item-desc">Item Description</label>
+                            <textarea class="form-control" id="item-desc" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-green">Add Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
 <div class="container">
     <div class="item-grid" id="items-container">
         <!-- Item boxes will be inserted here -->
     </div>
 </div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
@@ -131,9 +177,49 @@ function fetchItems() {
         });
 }
 
+
 // Call the fetchItems function to load the items on page load
 fetchItems();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Lisää tähän aiemmin antamani JavaScript-koodi
+    // Open the Add Item modal when the button is clicked
+    document.getElementById('add-item-button').addEventListener('click', () => {
+        $('#addItemModal').modal('show'); // Requires Bootstrap's modal JS
+    });
+
+    // Handle form submission for adding a new item
+    document.getElementById('add-item-form').addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const itemName = document.getElementById('item-name').value;
+        const itemDesc = document.getElementById('item-desc').value;
+
+        const itemToBeAdded = {
+            itemName,
+            itemDesc,
+        };
+
+        const token = localStorage.getItem('authToken'); // Assume token is stored in localStorage
+        const config = {
+            headers: { Authorization: `Bearer ${token}` },
+        };
+
+        try {
+            await axios.post('http://localhost:3003/api/items', itemToBeAdded, config);
+            $('#addItemModal').modal('hide'); // Close the modal
+            fetchItems(); // Refresh the item list
+        } catch (error) {
+            console.error('Error adding item:', error);
+            alert('Failed to add item.');
+        }
+    });
+</script>
+</body>
+
 
 </body>
 </html>
