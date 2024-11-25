@@ -149,7 +149,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                 itemDiv.appendChild(img);
             }
 
-            // Create delete button
+            //Luo poista nappula
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('btn', 'btn-danger');
@@ -243,14 +243,14 @@ function openModal(item) {
 
             // If successful, remove the item from the DOM
             document.querySelector(`.item-box[data-id='${item.id}']`).remove();
-            
+
             // Close the modal after deletion
             closeModal();
 
             // Alert user of success
-            alert('Item deleted successfully!');
+            alert('Esine poistettu!');
         } catch (error) {
-            console.error('Error deleting item:', error);
+            console.error('Virhe tavaran poistossa:', error);
 
             // Handle different error cases
             if (error.response && error.response.status === 403) {
@@ -285,7 +285,7 @@ window.onclick = function(event) {
     }
 };
 
- 
+
 // Function to delete an item
 async function deleteItem(itemId, itemElement) {
     const token = localStorage.getItem('token');

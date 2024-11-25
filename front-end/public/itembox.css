@@ -186,12 +186,12 @@
 /* Adjust layout for smaller screens */
 @media (max-width: 768px) {
     #modal-items-container .item-box {
-        width: calc(90% - 20px); /* Keep 1 item per row on tablets */
+        width: calc(90% - 20px);
     }
 }
 
 @media (max-width: 480px) {
     #modal-items-container .item-box {
-        width: calc(90% - 20px); /* Keep 1 item per row on mobile */
+        width: calc(90% - 20px);
     }
 }
