@@ -94,3 +94,94 @@ function fetchItems() {
 
 // Call the fetchItems function to load the items on page load
 fetchItems();
+
+
+// Function to display user's items with delete option
+document.getElementById('my-items-button').addEventListener('click', async () => {
+    const container = document.getElementById('my-items-container');
+    container.style.display = 'block'; // Show the "My Items" container
+    container.innerHTML = '<p>Loading...</p>'; // Add a loading message
+
+    const token = localStorage.getItem('token'); // Get the auth token
+    const config = {
+        headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+        // Fetch all items from the API
+        const response = await axios.get('http://localhost:3003/api/items', config);
+        const allItems = response.data;
+
+        // Decode token to get the logged-in user's ID
+        const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+        const currentUserId = tokenPayload.id;
+
+        // Filter items belonging to the logged-in user
+        const userItems = allItems.filter(item => item.user.id === currentUserId);
+
+        if (userItems.length === 0) {
+            container.innerHTML = '<p>No items found.</p>';
+            return;
+        }
+
+        container.innerHTML = ''; // Clear the container
+        userItems.forEach(item => {
+            // Create item box
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('item-box');
+
+            const itemName = document.createElement('h3');
+            itemName.textContent = item.itemName;
+            itemDiv.appendChild(itemName);
+
+            const itemDesc = document.createElement('p');
+            itemDesc.textContent = item.itemDesc;
+            itemDiv.appendChild(itemDesc);
+
+            if (item.imgUrl) {
+                const img = document.createElement('img');
+                img.src = item.imgUrl;
+                img.alt = `${item.itemName} Image`;
+                img.classList.add('item-image');
+                itemDiv.appendChild(img);
+            }
+
+            // Add a delete button
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('btn', 'btn-danger');
+            deleteButton.onclick = async () => {
+                try {
+                    await axios.delete(`http://localhost:3003/api/items/${item._id}`, config);
+                    itemDiv.remove(); // Remove the item from the DOM
+                } catch (error) {
+                    alert('Failed to delete item.');
+                }
+            };
+            itemDiv.appendChild(deleteButton);
+
+            container.appendChild(itemDiv);
+        });
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        container.innerHTML = '<p>Failed to load your items.</p>';
+    }
+});
+
+
+// Function to delete an item
+async function deleteItem(itemId, itemElement) {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+        await axios.delete(`http://localhost:3003/api/items/${itemId}`, config);
+        itemElement.remove(); // Remove item element from the DOM
+        alert('Item deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting item:', error);
+        alert('Failed to delete item.');
+    }
+}

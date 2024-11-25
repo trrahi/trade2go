@@ -76,3 +76,35 @@
                 border-radius: 8px;
                 margin-bottom: 10px;
             }
+            /* My Items button styling */
+            
+            .my-items-container {
+                display: flex;
+                justify-content: center;
+                margin: 20px 0;
+            }
+
+            #my-items-button {
+                font-size: 1.2rem;
+                padding: 10px 20px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+
+            #my-items-button:hover {
+                background-color: #0056b3;
+                transform: scale(1.05);
+            }
+
+            /* Styling for the items container */
+            #my-items-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center;
+                padding: 20px;
+            }
