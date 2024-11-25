@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 
 const itemSchema = mongoose.Schema({
-	itemName: String,
-	itemDesc: String,
-	imgUrl: { type: String, required: true }, // Add imgUrl with required validation
+	itemName: { type: String, required: true },
+	itemDesc: { type: String, required: true },
+	imgUrl: { type: String, required: false },
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: "User",
