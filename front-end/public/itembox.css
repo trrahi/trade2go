@@ -68,3 +68,11 @@
                 margin-top: 8px;
             }
             
+            .item-image {
+                max-width: 100%; /* Prevent image from going beyond the container width */
+                height: auto; /* Keep the aspect ratio intact */
+                max-height: 200px; /* Limit the height of the image */
+                object-fit: contain; /* Ensure the image fits within the container */
+                border-radius: 8px;
+                margin-bottom: 10px;
+            }
