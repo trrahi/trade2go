@@ -5,7 +5,7 @@
         align-items: center;
         margin: 30px 0;
     }
-    
+
     /* Style the "Add Item" button */
     #add-item-button {
         font-size: 1.5rem; /* Larger font size */
@@ -17,23 +17,23 @@
         cursor: pointer;
         transition: all 0.3s ease; /* Smooth hover effect */
     }
-    
+
     /* Hover effect for the button */
     #add-item-button:hover {
         background-color: #218838; /* Darker green on hover */
         transform: scale(1.05); /* Slightly enlarge the button */
     }
-    
+
             /* Custom styling for green buttons */
             .btn-green {
                 background-color: #28a745;
                 color: white;
             }
-    
+
             .btn-green:hover {
                 background-color: #218838;
             }
-    
+
             /* Center the "Add Item" button */
             .add-item-container {
                 display: flex;
@@ -41,7 +41,7 @@
                 align-items: center;
                 margin: 30px 0;
             }
-    
+
             /* Item grid layout */
             .item-grid {
                 display: flex;
@@ -50,7 +50,7 @@
                 justify-content: space-around;
                 padding: 50px;
             }
-    
+
             /* Set each item box */
             .item-box {
                 width: 30%;
@@ -67,7 +67,7 @@
                 color: #555;
                 margin-top: 8px;
             }
-            
+
             .item-image {
                 max-width: 100%; /* Prevent image from going beyond the container width */
                 height: auto; /* Keep the aspect ratio intact */
@@ -78,13 +78,14 @@
             }
             /* My Items button styling */
 
-            .my-items-container {
-                display: flex;
-                justify-content: center;
-                margin: 20px 0;
-            }
 
-            #my-items-button {
+.my-items-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+#my-items-button {
                 font-size: 1.2rem;
                 padding: 10px 20px;
                 background-color: #007bff;
@@ -154,17 +155,68 @@
                 overflow-y: auto;
             }
 
-            .item-box {
-                background: #f9f9f9;
-                padding: 10px;
-                margin-bottom: 15px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-            }
+/* Modal Background */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1050; /* Increased z-index to ensure it's on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with transparency */
+    overflow: auto; /* Ensure modal content is scrollable if necessary */
+}
 
-            .item-image {
-                max-width: 100%;
-                height: auto;
-                display: block;
-                margin-top: 10px;
-            }
+/* Modal Content */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    margin: 10% auto;
+    text-align: center;
+    position: relative; /* Added to make sure the content stays centered and doesn't get lost */
+    z-index: 1060; /* Ensure modal content is on top of the background */
+}
+
+/* Close Button */
+.close-btn {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    z-index: 1070; /* Ensure close button is on top */
+}
+
+.close-btn:hover,
+.close-btn:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Additional Modal Content Styling */
+#modal-items-container {
+    margin-top: 20px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.item-box {
+    background: #f9f9f9;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.item-image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-top: 10px;
+}
+

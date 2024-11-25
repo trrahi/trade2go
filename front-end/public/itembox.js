@@ -131,6 +131,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
             // Create item box
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('item-box');
+            itemDiv.setAttribute('data-id', item.id); // Set a custom data attribute for the item ID
 
             const itemName = document.createElement('h4');
             itemName.textContent = item.itemName;
@@ -162,12 +163,12 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                     // Make the DELETE request using `item.id` (not `item._id`)
                     await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
 
-                    // If successful, remove the item from the DOM
+                    // If successful, remove the item from the DOM immediately
                     itemDiv.remove();
                     alert('Item deleted successfully!');
                 } catch (error) {
                     console.error('Error deleting item:', error);
-                    
+
                     // Handle specific error responses
                     if (error.response && error.response.status === 403) {
                         alert('You are not authorized to delete this item.');
@@ -200,8 +201,6 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
     }
 });
 
-
-
 // Close modal functionality
 document.querySelector('.close-btn').addEventListener('click', () => {
     const modal = document.getElementById('items-modal');
@@ -217,38 +216,55 @@ window.onclick = function(event) {
 };
 
 
-// Function to open the modal
 function openModal(item) {
     const modal = document.getElementById('item-modal');
     const modalName = document.getElementById('modal-item-name');
     const modalDesc = document.getElementById('modal-item-desc');
     const modalImg = document.getElementById('modal-item-img');
     const deleteButton = document.getElementById('modal-delete-btn');
+    const closeButton = document.querySelector('.close-btn'); // Get the close button of the modal
 
-    // Set modal content
+    // Set modal content based on the item passed
     modalName.textContent = item.itemName;
     modalDesc.textContent = item.itemDesc;
-    modalImg.src = item.imgUrl;
+    modalImg.src = item.imgUrl ? item.imgUrl : ''; // Set the image or fallback to empty if no image URL exists
 
-    // Show modal
+    // Show the modal
     modal.style.display = 'block';
 
     // Handle Delete Button Click
     deleteButton.onclick = async () => {
         try {
-            const token = localStorage.getItem('token');
-            const config = { headers: { Authorization: `Bearer ${token}` } };
+            const token = localStorage.getItem('token'); // Get the token from localStorage
+            const config = { headers: { Authorization: `Bearer ${token}` } }; // Set Authorization header
+
+            // Make DELETE request to the backend
             await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
 
-            // If successful, remove item from DOM and close modal
+            // If successful, remove the item from the DOM
             document.querySelector(`.item-box[data-id='${item.id}']`).remove();
+            
+            // Close the modal after deletion
             closeModal();
+
+            // Alert user of success
             alert('Item deleted successfully!');
         } catch (error) {
             console.error('Error deleting item:', error);
-            alert('An error occurred while deleting the item.');
+
+            // Handle different error cases
+            if (error.response && error.response.status === 403) {
+                alert('You are not authorized to delete this item.');
+            } else if (error.response && error.response.status === 404) {
+                alert('Item not found.');
+            } else {
+                alert('An error occurred while deleting the item.');
+            }
         }
     };
+
+    // Close the modal when the user clicks on the close button
+    closeButton.addEventListener('click', closeModal);
 }
 
 // Function to close the modal
@@ -256,6 +272,7 @@ function closeModal() {
     const modal = document.getElementById('item-modal');
     modal.style.display = 'none';
 }
+
 
 // Close the modal when the "x" button is clicked
 document.querySelector('.close-btn').addEventListener('click', closeModal);
