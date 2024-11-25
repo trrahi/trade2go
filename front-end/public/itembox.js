@@ -97,10 +97,11 @@ fetchItems();
 
 
 // Function to display user's items with delete option
+// Event listener for "Omat esineet" button
 document.getElementById('my-items-button').addEventListener('click', async () => {
-    const container = document.getElementById('my-items-container');
-    container.style.display = 'block'; // Show the "My Items" container
-    container.innerHTML = '<p>Loading...</p>'; // Add a loading message
+    const modal = document.getElementById('items-modal');
+    const container = document.getElementById('modal-items-container');
+    container.innerHTML = '<p>Loading...</p>'; // Show a loading message
 
     const token = localStorage.getItem('token'); // Get the auth token
     const config = {
@@ -125,12 +126,13 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         }
 
         container.innerHTML = ''; // Clear the container
+
         userItems.forEach(item => {
             // Create item box
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('item-box');
 
-            const itemName = document.createElement('h3');
+            const itemName = document.createElement('h4');
             itemName.textContent = item.itemName;
             itemDiv.appendChild(itemName);
 
@@ -146,7 +148,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                 itemDiv.appendChild(img);
             }
 
-            // Add a delete button
+            // Create delete button
             const deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
             deleteButton.classList.add('btn', 'btn-danger');
@@ -157,21 +159,15 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                         headers: { Authorization: `Bearer ${token}` },
                     };
 
-                    if (!item.id) { // Use item.id instead of item._id since the API response uses "id"
-                        console.error('Item ID is missing or undefined:', item);
-                        alert('Unable to delete this item due to missing ID.');
-                        return;
-                    }
-
-                    // Make the DELETE request
-                    await axios.delete(`http://localhost:3003/api/items/${item.id}`, config); // Use item.id here
+                    // Make the DELETE request using `item.id` (not `item._id`)
+                    await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
 
                     // If successful, remove the item from the DOM
                     itemDiv.remove();
                     alert('Item deleted successfully!');
                 } catch (error) {
                     console.error('Error deleting item:', error);
-
+                    
                     // Handle specific error responses
                     if (error.response && error.response.status === 403) {
                         alert('You are not authorized to delete this item.');
@@ -183,14 +179,95 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                 }
             };
 
+            // Append delete button
             itemDiv.appendChild(deleteButton);
+
+            // Append the item to the modal container
             container.appendChild(itemDiv);
         });
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal when the close button is clicked
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
     } catch (error) {
         console.error('Error fetching items:', error);
         container.innerHTML = '<p>Failed to load items. Please try again later.</p>';
     }
 });
+
+
+
+// Close modal functionality
+document.querySelector('.close-btn').addEventListener('click', () => {
+    const modal = document.getElementById('items-modal');
+    modal.style.display = 'none';
+});
+
+// Close modal if the user clicks outside of the modal
+window.onclick = function(event) {
+    const modal = document.getElementById('items-modal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+};
+
+
+// Function to open the modal
+function openModal(item) {
+    const modal = document.getElementById('item-modal');
+    const modalName = document.getElementById('modal-item-name');
+    const modalDesc = document.getElementById('modal-item-desc');
+    const modalImg = document.getElementById('modal-item-img');
+    const deleteButton = document.getElementById('modal-delete-btn');
+
+    // Set modal content
+    modalName.textContent = item.itemName;
+    modalDesc.textContent = item.itemDesc;
+    modalImg.src = item.imgUrl;
+
+    // Show modal
+    modal.style.display = 'block';
+
+    // Handle Delete Button Click
+    deleteButton.onclick = async () => {
+        try {
+            const token = localStorage.getItem('token');
+            const config = { headers: { Authorization: `Bearer ${token}` } };
+            await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
+
+            // If successful, remove item from DOM and close modal
+            document.querySelector(`.item-box[data-id='${item.id}']`).remove();
+            closeModal();
+            alert('Item deleted successfully!');
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            alert('An error occurred while deleting the item.');
+        }
+    };
+}
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById('item-modal');
+    modal.style.display = 'none';
+}
+
+// Close the modal when the "x" button is clicked
+document.querySelector('.close-btn').addEventListener('click', closeModal);
+
+// Close modal if user clicks anywhere outside the modal
+window.onclick = function(event) {
+    const modal = document.getElementById('item-modal');
+    if (event.target == modal) {
+        closeModal();
+    }
+};
+
  
 // Function to delete an item
 async function deleteItem(itemId, itemElement) {
