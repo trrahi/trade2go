@@ -118,3 +118,9 @@ button:hover {
     background-color: #218838;
 }
 
+.item-image {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    border-radius: 8px;
+}

@@ -24,31 +24,55 @@ itemsRouter.get("/", async (req, res) => {
 
 itemsRouter.post("/", async (req, res) => {
 	console.log("In itemsRouter");
-	// decodedToken sisältää: kentät username ja id. Token on luotu käyttämällä näitä kenttiä ja .envin SECRET muuttujaa. Token on joka kerta eri, koska siihen lisätään myös luontiajan sisältä iat-kenttä. Se pystytään dekoomaan jwt-kirjastolla.
 
 	const decodedToken = jwt.verify(getTokenFrom(req), process.env.SECRET)
-	// console.log("dekodaattu token: ", decodedToken)
-
 	if (!decodedToken.id) {
-		return res.status(401).json({ error: "Tokeni epävalidi" })
+		return res.status(401).json({ error: "Invalid token" })
 	}
 
 	const user = await User.findById(decodedToken.id)
-	// Dekonnstrukroidaan POST- pyynnöstä uuden lisättävän itemin tiedot ja lisätään ne item-modelilla kontstruktoituun item-olioon. itemin lisääjäksi user-kentään lisätään tietokannasta haettu käyttäjä.
-	const { itemName, itemDesc } = req.body
+	const { itemName, itemDesc, imgUrl } = req.body
+
+	// Validate required fields
+	if (!itemName || !itemDesc || !imgUrl) {
+		return res.status(400).json({ error: "All fields are required: itemName, itemDesc, imgUrl." })
+	}
+
 	const item = new Item({
 		itemName,
 		itemDesc,
+		imgUrl,
 		user: user._id
 	})
 
-	const savedItem = await item.save()
-	// Userin (joka on haettu dekoodatulla tokenilla tietokannasta), items-kenttään konkatenoidaan uuden lisätyn itemin id.
-	user.items = user.items.concat(savedItem._id)
-	await user.save()
-	// Palautetaan clientille tallennettu itemi.
-	res.status(201).json(savedItem)
+	try {
+		const savedItem = await item.save()
+		user.items = user.items.concat(savedItem._id)
+		await user.save()
+
+		res.status(201).json(savedItem)
+	} catch (error) {
+		res.status(400).json({ error: error.message })
+	}
 })
+
+// PUT route to update items
+itemsRouter.put("/:id", async (req, res) => {
+	const id = req.params.id;
+	const { itemName, itemDesc, imgUrl } = req.body;
+
+	const updatedItem = { itemName, itemDesc, imgUrl };
+	try {
+		const result = await Item.findByIdAndUpdate(id, updatedItem, { new: true });
+		if (!result) {
+			return res.status(404).send("Item not found with the provided ID.");
+		}
+		res.status(200).json(result);
+	} catch (error) {
+		res.status(400).json({ error: error.message });
+	}
+});
+
 
 // DELETE  a item
 itemsRouter.delete("/:id", async (req, res) => {
@@ -71,17 +95,6 @@ itemsRouter.delete("/:id", async (req, res) => {
 
 	// THIS IS TRUE
 	// console.log(decodedToken.id == item.user._id);
-})
-
-// PUT, päivitä itemin tiedot
-itemsRouter.put("/:id", async (req, res) => {
-	const id = req.params.id
-	const updatedItem = req.body
-	const result = await Item.findByIdAndUpdate(id, updatedItem, { new: true })
-	if (!result) {
-		return res.status(404).send("itemia ei löytynyt tuolla tunnisteella 🗿")
-	}
-	res.status(200).json(result)
 })
 
 module.exports = itemsRouter

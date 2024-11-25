@@ -9,10 +9,12 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
 
     const itemName = document.getElementById('item-name').value;
     const itemDesc = document.getElementById('item-desc').value;
+    const imgUrl = document.getElementById('img-url').value;
 
     const itemToBeAdded = {
         itemName,
         itemDesc,
+        imgUrl, // Include the Imgur link in the request
     };
 
     const token = localStorage.getItem('token'); // Assume token is stored in localStorage
@@ -29,6 +31,7 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
         alert('Failed to add item.');
     }
 });
+
 
 // Function to display the items
 function displayItems(items) {
@@ -49,6 +52,15 @@ function displayItems(items) {
         const itemDesc = document.createElement('p');
         itemDesc.textContent = item.itemDesc;
         itemDiv.appendChild(itemDesc);
+
+        // Create and append item image
+        if (item.imgUrl) {
+            const itemImage = document.createElement('img');
+            itemImage.src = item.imgUrl;
+            itemImage.alt = `${item.itemName} Image`;
+            itemImage.classList.add('item-image'); // Add a class for styling
+            itemDiv.appendChild(itemImage);
+        }
 
         // Create and append user information
         const userInfo = document.createElement('p');
