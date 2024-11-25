@@ -94,3 +94,211 @@ function fetchItems() {
 
 // Call the fetchItems function to load the items on page load
 fetchItems();
+
+
+// Function to display user's items with delete option
+// Event listener for "Omat esineet" button
+document.getElementById('my-items-button').addEventListener('click', async () => {
+    const modal = document.getElementById('items-modal');
+    const container = document.getElementById('modal-items-container');
+    container.innerHTML = '<p>Loading...</p>'; // Show a loading message
+
+    const token = localStorage.getItem('token'); // Get the auth token
+    const config = {
+        headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+        // Fetch all items from the API
+        const response = await axios.get('http://localhost:3003/api/items', config);
+        const allItems = response.data;
+
+        // Decode token to get the logged-in user's ID
+        const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+        const currentUserId = tokenPayload.id;
+
+        // Filter items belonging to the logged-in user
+        const userItems = allItems.filter(item => item.user.id === currentUserId);
+
+        if (userItems.length === 0) {
+            container.innerHTML = '<p>No items found.</p>';
+            return;
+        }
+
+        container.innerHTML = ''; // Clear the container
+
+        userItems.forEach(item => {
+            // Create item box
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('item-box');
+            itemDiv.setAttribute('data-id', item.id); // Set a custom data attribute for the item ID
+
+            const itemName = document.createElement('h4');
+            itemName.textContent = item.itemName;
+            itemDiv.appendChild(itemName);
+
+            const itemDesc = document.createElement('p');
+            itemDesc.textContent = item.itemDesc;
+            itemDiv.appendChild(itemDesc);
+
+            if (item.imgUrl) {
+                const img = document.createElement('img');
+                img.src = item.imgUrl;
+                img.alt = `${item.itemName} Image`;
+                img.classList.add('item-image');
+                itemDiv.appendChild(img);
+            }
+
+            //Luo poista nappula
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = 'Delete';
+            deleteButton.classList.add('btn', 'btn-danger');
+            deleteButton.onclick = async () => {
+                try {
+                    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+                    const config = {
+                        headers: { Authorization: `Bearer ${token}` },
+                    };
+
+                    // Make the DELETE request using `item.id` (not `item._id`)
+                    await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
+
+                    // If successful, remove the item from the DOM immediately
+                    itemDiv.remove();
+                    alert('Item deleted successfully!');
+                } catch (error) {
+                    console.error('Error deleting item:', error);
+
+                    // Handle specific error responses
+                    if (error.response && error.response.status === 403) {
+                        alert('You are not authorized to delete this item.');
+                    } else if (error.response && error.response.status === 404) {
+                        alert('Item not found.');
+                    } else {
+                        alert('An error occurred while deleting the item.');
+                    }
+                }
+            };
+
+            // Append delete button
+            itemDiv.appendChild(deleteButton);
+
+            // Append the item to the modal container
+            container.appendChild(itemDiv);
+        });
+
+        // Show the modal
+        modal.style.display = 'block';
+
+        // Close the modal when the close button is clicked
+        document.querySelector('.close-btn').addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+    } catch (error) {
+        console.error('Error fetching items:', error);
+        container.innerHTML = '<p>Failed to load items. Please try again later.</p>';
+    }
+});
+
+// Close modal functionality
+document.querySelector('.close-btn').addEventListener('click', () => {
+    const modal = document.getElementById('items-modal');
+    modal.style.display = 'none';
+});
+
+// Close modal if the user clicks outside of the modal
+window.onclick = function(event) {
+    const modal = document.getElementById('items-modal');
+    if (event.target === modal) {
+        modal.style.display = 'none';
+    }
+};
+
+
+function openModal(item) {
+    const modal = document.getElementById('item-modal');
+    const modalName = document.getElementById('modal-item-name');
+    const modalDesc = document.getElementById('modal-item-desc');
+    const modalImg = document.getElementById('modal-item-img');
+    const deleteButton = document.getElementById('modal-delete-btn');
+    const closeButton = document.querySelector('.close-btn'); // Get the close button of the modal
+
+    // Set modal content based on the item passed
+    modalName.textContent = item.itemName;
+    modalDesc.textContent = item.itemDesc;
+    modalImg.src = item.imgUrl ? item.imgUrl : ''; // Set the image or fallback to empty if no image URL exists
+
+    // Show the modal
+    modal.style.display = 'block';
+
+    // Handle Delete Button Click
+    deleteButton.onclick = async () => {
+        try {
+            const token = localStorage.getItem('token'); // Get the token from localStorage
+            const config = { headers: { Authorization: `Bearer ${token}` } }; // Set Authorization header
+
+            // Make DELETE request to the backend
+            await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
+
+            // If successful, remove the item from the DOM
+            document.querySelector(`.item-box[data-id='${item.id}']`).remove();
+
+            // Close the modal after deletion
+            closeModal();
+
+            // Alert user of success
+            alert('Esine poistettu!');
+        } catch (error) {
+            console.error('Virhe tavaran poistossa:', error);
+
+            // Handle different error cases
+            if (error.response && error.response.status === 403) {
+                alert('You are not authorized to delete this item.');
+            } else if (error.response && error.response.status === 404) {
+                alert('Item not found.');
+            } else {
+                alert('An error occurred while deleting the item.');
+            }
+        }
+    };
+
+    // Close the modal when the user clicks on the close button
+    closeButton.addEventListener('click', closeModal);
+}
+
+// Function to close the modal
+function closeModal() {
+    const modal = document.getElementById('item-modal');
+    modal.style.display = 'none';
+}
+
+
+// Close the modal when the "x" button is clicked
+document.querySelector('.close-btn').addEventListener('click', closeModal);
+
+// Close modal if user clicks anywhere outside the modal
+window.onclick = function(event) {
+    const modal = document.getElementById('item-modal');
+    if (event.target == modal) {
+        closeModal();
+    }
+};
+
+
+// Function to delete an item
+async function deleteItem(itemId, itemElement) {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: { Authorization: `Bearer ${token}` },
+    };
+
+    try {
+        await axios.delete(`http://localhost:3003/api/items/${itemId}`, config);
+        itemElement.remove(); // Remove item element from the DOM
+        alert('Item deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting item:', error);
+        alert('Failed to delete item.');
+    }
+}
