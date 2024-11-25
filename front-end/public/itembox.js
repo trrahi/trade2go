@@ -152,23 +152,46 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
             deleteButton.classList.add('btn', 'btn-danger');
             deleteButton.onclick = async () => {
                 try {
-                    await axios.delete(`http://localhost:3003/api/items/${item._id}`, config);
-                    itemDiv.remove(); // Remove the item from the DOM
+                    const token = localStorage.getItem('token'); // Retrieve the token from local storage
+                    const config = {
+                        headers: { Authorization: `Bearer ${token}` },
+                    };
+
+                    if (!item.id) { // Use item.id instead of item._id since the API response uses "id"
+                        console.error('Item ID is missing or undefined:', item);
+                        alert('Unable to delete this item due to missing ID.');
+                        return;
+                    }
+
+                    // Make the DELETE request
+                    await axios.delete(`http://localhost:3003/api/items/${item.id}`, config); // Use item.id here
+
+                    // If successful, remove the item from the DOM
+                    itemDiv.remove();
+                    alert('Item deleted successfully!');
                 } catch (error) {
-                    alert('Failed to delete item.');
+                    console.error('Error deleting item:', error);
+
+                    // Handle specific error responses
+                    if (error.response && error.response.status === 403) {
+                        alert('You are not authorized to delete this item.');
+                    } else if (error.response && error.response.status === 404) {
+                        alert('Item not found.');
+                    } else {
+                        alert('An error occurred while deleting the item.');
+                    }
                 }
             };
-            itemDiv.appendChild(deleteButton);
 
+            itemDiv.appendChild(deleteButton);
             container.appendChild(itemDiv);
         });
     } catch (error) {
         console.error('Error fetching items:', error);
-        container.innerHTML = '<p>Failed to load your items.</p>';
+        container.innerHTML = '<p>Failed to load items. Please try again later.</p>';
     }
 });
-
-
+ 
 // Function to delete an item
 async function deleteItem(itemId, itemElement) {
     const token = localStorage.getItem('token');
