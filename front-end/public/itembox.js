@@ -27,7 +27,7 @@ document.getElementById('add-item-button').addEventListener('click', () => {
 
 
 
-// tavaran lisäys CHANGED!
+// tavaran lisäys 
 document.getElementById('add-item-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -41,7 +41,7 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
         imgUrl,
     };
 
-    const token = localStorage.getItem('token'); // Olettaa tokenin olevan tallennettuna localStorageen
+    const token = localStorage.getItem('token')
     const headers = {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${token}`,
@@ -51,15 +51,15 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
         const response = await fetch('http://localhost:3003/api/items', {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(itemToBeAdded), // Send the item data as a JSON string
+            body: JSON.stringify(itemToBeAdded), 
         });
 
         if (!response.ok) {
             throw new Error('Virhe tavaran lisäämisessä');
         }
 
-        $('#addItemModal').modal('hide'); // Sulkee modaalin
-        fetchItems(); // Päivittää item listan
+        $('#addItemModal').modal('hide'); 
+        fetchItems(); 
     } catch (error) {
         console.error('Virhe tavaran lisäämisessä:', error);
         alert('Epäonnistuminen tavaran lisäämisessä');
@@ -73,57 +73,50 @@ function displayItems(items) {
     container.innerHTML = '';
 
     items.forEach(item => {
-        // Luo laatikon itemeille
         const itemDiv = document.createElement('div');
         itemDiv.classList.add('item-box');
 
-        // Luo ja lisää itemin nimen
         const itemName = document.createElement('h3');
         itemName.textContent = item.itemName;
         itemDiv.appendChild(itemName);
 
-        // Luo ja lisää itemin kuvauksen
         const itemDesc = document.createElement('p');
         itemDesc.textContent = item.itemDesc;
         itemDiv.appendChild(itemDesc);
 
-        // Luo ja lisää itemin kuvan
         if (item.imgUrl) {
             const itemImage = document.createElement('img');
             itemImage.src = item.imgUrl;
             itemImage.alt = `${item.itemName} Image`;
-            itemImage.classList.add('item-image'); // Luokan lisääminen tyylittelyä varten
+            itemImage.classList.add('item-image'); 
             itemDiv.appendChild(itemImage);
         }
 
-        // Luo ja lisää käyttäjätiedot
         const userInfo = document.createElement('p');
         userInfo.classList.add('user-info');
         userInfo.textContent = `Ilmoittaja: ${item.user.userName} (${item.user.email})`;
         itemDiv.appendChild(userInfo);
 
-        // Luo ja lisää vaihda napin
         const tradeBtn = document.createElement('button');
         tradeBtn.classList.add('btn', 'btn-green');
         tradeBtn.textContent = 'Vaihda';
         tradeBtn.onclick = () => alert('Initiate trade for ' + item.itemName);
         itemDiv.appendChild(tradeBtn);
 
-        // Lisää esineiden laatikon containeriin
         container.appendChild(itemDiv);
     });
 }
 
 function fetchItems() {
-	fetch("http://localhost:3003/api/items") // Esineiden API
+	fetch("http://localhost:3003/api/items")
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error("Tavaroiden hakeminen epäonnistui")
 			}
-			return response.json() // Parse the response as JSON
+			return response.json() 
 		})
 		.then((data) => {
-			displayItems(data) // Siirrä haetut esineet näyttämisfunktiolle
+			displayItems(data) 
 		})
 		.catch((error) => {
 			console.error("Virhe tavaroiden hakemisessa:", error)
@@ -140,15 +133,14 @@ fetchItems();
 document.getElementById('my-items-button').addEventListener('click', async () => {
     const modal = document.getElementById('items-modal');
     const container = document.getElementById('modal-items-container');
-    container.innerHTML = '<p>Ladataan...</p>'; // Näyttää latausviestin
+    container.innerHTML = '<p>Ladataan...</p>'; 
 
-    const token = localStorage.getItem('token'); // Hakee auth-tunnuksen localStoragesta
+    const token = localStorage.getItem('token'); 
     const headers = {
         'Authorization': `Bearer ${token}`,
     };
 
     try {
-        // Hakee kaikki esineet API:sta
         const response = await fetch('http://localhost:3003/api/items', {
             method: 'GET',
             headers: headers,
@@ -164,7 +156,6 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         const tokenPayload = JSON.parse(atob(token.split('.')[1]));
         const currentUserId = tokenPayload.id;
 
-        // Suodata kirjautuneen käyttäjän esineet
         const userItems = allItems.filter(item => item.user.id === currentUserId);
 
         if (userItems.length === 0) {
@@ -172,10 +163,9 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
             return;
         }
 
-        container.innerHTML = ''; // Tyhjentää containerin
+        container.innerHTML = ''; 
 
         userItems.forEach(item => {
-            // Luo esineelle laatikon
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('item-box');
             itemDiv.setAttribute('data-id', item.id); // Asettaa mukautetun data-attribuutin esineen ID:lle
@@ -229,17 +219,13 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                 }
             };
 
-            // Poistonapin lisääminen
             itemDiv.appendChild(deleteButton);
 
-            // Lisää esineen modaalin containeriin
             container.appendChild(itemDiv);
         });
 
-        // Näyttää modaalin
         modal.style.display = 'block';
 
-        // Sulkee modaalin "Sulje" nappia painettaessa
         document.querySelector('.close-btn').addEventListener('click', () => {
             modal.style.display = 'none';
         });
@@ -272,20 +258,19 @@ function openModal(item) {
     const modalDesc = document.getElementById('modal-item-desc');
     const modalImg = document.getElementById('modal-item-img');
     const deleteButton = document.getElementById('modal-delete-btn');
-    const closeButton = document.querySelector('.close-btn'); // Get the close button of the modal
+    const closeButton = document.querySelector('.close-btn'); 
 
     // Aseta modaalin sisältö sen esineen perusteella, joka on välitetty funktiolle
     modalName.textContent = item.itemName;
     modalDesc.textContent = item.itemDesc;
-    modalImg.src = item.imgUrl ? item.imgUrl : ''; // Jos kohteella on kuva, näytä se; muuten jätä kuva tyhjäksi
+    modalImg.src = item.imgUrl ? item.imgUrl : ''; 
 
-    // Näyttää modaalin
     modal.style.display = 'block';
 
     // Poistonapin käsittely klikattaessa
     deleteButton.onclick = async () => {
         try {
-            const token = localStorage.getItem('token'); // Hakee tunnuksen localStoragesta
+            const token = localStorage.getItem('token'); 
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             // Lähettää DELETE pyynnön backendiin
@@ -297,16 +282,13 @@ function openModal(item) {
 
             fetchItems();
 
-            // Sulkee modaalin poistamisen jälkeen
             closeModal();
 
-            // Ilmoittaa onnistuneesta esineen poistamisesta
             alert('Esine poistettu!');
 
         } catch (error) {
             console.error('Virhe tavaran poistossa:', error);
 
-            // Erilaisten virheiden käsittely
             if (error.response && error.response.status === 403) {
                 alert('Sinulla ei ole lupaa poistaa tätä esinettä.');
             } else if (error.response && error.response.status === 404) {
@@ -317,7 +299,6 @@ function openModal(item) {
         }
     };
 
-    // Sulkee modaalin kun käyttäjä klikkaa "Sulje" nappia
     closeButton.addEventListener('click', closeModal);
 }
 
@@ -348,12 +329,11 @@ async function deleteItem(itemId, itemElement) {
     };
 
     try {
-        // await axios.delete(`http://localhost:3003/api/items/${itemId}`, config);
         const response = await fetch(`http://localhost:3003/api/items/${itemId}`, {
             method: "DELETE",
             headers: headers
         })
-        itemElement.remove(); // Poistaa esineen elemtin DOM:ista
+        itemElement.remove(); 
         alert('Esine poistui onnistuneesti');
     } catch (error) {
         console.error('Virhe tavaran poistamisessa:', error);
