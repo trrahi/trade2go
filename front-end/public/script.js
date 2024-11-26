@@ -8,7 +8,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 	const password = document.getElementById("password").value
 
 	axios
-		.post("https://trade2go.onrender.com/api/login", {
+		.post("http://localhost:3003/api/login", {
 			email: email,
 			password: password
 		})
