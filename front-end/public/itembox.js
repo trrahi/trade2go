@@ -185,7 +185,8 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
 
                     // Tekee DELETE pyynnön käyttämällä "item.id" (ei "item._id")
                     await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
-
+                    // Kutsuu fetchItems, joka hakee ja renderöi esineet uudelleen
+                    await fetchItems();
                     // Onnistuessa poistaa esineen DOM:ista (poistaa näkyvistä sivulla)
                     itemDiv.remove();
                     alert('Esine poistettu!');
@@ -264,14 +265,14 @@ function openModal(item) {
             // Lähettää DELETE pyynnön backendiin
             await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
 
-            // Onnistuessa poistaa esineen DOM:ista eli näkyvistä
-            document.querySelector(`.item-box[data-id='${item.id}']`).remove();
+            fetchItems();
 
             // Sulkee modaalin poistamisen jälkeen
             closeModal();
 
             // Ilmoittaa onnistuneesta esineen poistamisesta
             alert('Esine poistettu!');
+
         } catch (error) {
             console.error('Virhe tavaran poistossa:', error);
 
@@ -288,6 +289,7 @@ function openModal(item) {
 
     // Sulkee modaalin kun käyttäjä klikkaa "Sulje" nappia
     closeButton.addEventListener('click', closeModal);
+
 }
 
 // Modaalin sulkemisfunktio
