@@ -7,35 +7,40 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 	const email = document.getElementById("email").value;
 	const password = document.getElementById("password").value;
 
+	// Create a new XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
 
+	// Configure it: POST-request for the URL
 	xhr.open("POST", "http://localhost:3003/api/login", true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 
-	// vastauksesta haetaan käyttäjän tiedot ja tallennetaan LS
+	// Handle the response
 	xhr.onload = function () {
 		if (xhr.status === 200) {
 			const response = JSON.parse(xhr.responseText);
 			const { token, userName, firstName } = response;
 
+			// Tallenna token ja käyttäjän nimi localStorageen
 			localStorage.setItem("token", token);
 			localStorage.setItem("userName", userName);
 
-			// Ohjaa käyttäjä pääsivullee
+			// Ohjaa käyttäjä etusivulle
 			window.location.href = "itembox.html";
 		} else {
-			document.getElementById("loginError").textContent = "Käyttäjätunnus tai salasana väärät.";
+			document.getElementById("loginError").textContent = "Invalid login credentials.";
 		}
 	};
 
+	// Handle network errors
 	xhr.onerror = function () {
-		document.getElementById("loginError").textContent = "Network error, sos!!!!.";
+		document.getElementById("loginError").textContent = "An error occurred during the request.";
 	};
 
-	// Lähetetään kirjautumisen tiedot palvelimelle
+	// Send the request with the login data
 	const requestData = JSON.stringify({ email: email, password: password });
 	xhr.send(requestData);
 });
+
 
 
 
