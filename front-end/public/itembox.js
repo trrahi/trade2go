@@ -124,7 +124,7 @@ fetchItems();
 document.getElementById('my-items-button').addEventListener('click', async () => {
     const modal = document.getElementById('items-modal');
     const container = document.getElementById('modal-items-container');
-    container.innerHTML = '<p>Loading...</p>'; // Näyttää latausviestin
+    container.innerHTML = '<p>Ladataan...</p>'; // Näyttää latausviestin
 
     const token = localStorage.getItem('token'); // Hakee auth-tunnuksen localStoragesta
     const config = {
@@ -144,7 +144,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         const userItems = allItems.filter(item => item.user.id === currentUserId);
 
         if (userItems.length === 0) {
-            container.innerHTML = '<p>Esinettä ei löytynyt.</p>';
+            alert('Esineitä ei löytynyt.');
             return;
         }
 
