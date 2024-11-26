@@ -13,6 +13,7 @@ console.log("Test, delete this console.log");
 
 itemsRouter.get("/", async (req, res) => {
     try {
+		console.log("GEt req to api/items");
         const items = await Item.find({}).populate("user", { userName: 1, email: 1 }); // Populate userName and email
         res.json(items);
     } catch (error) {
