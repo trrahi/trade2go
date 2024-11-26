@@ -25,7 +25,9 @@ document.getElementById('add-item-button').addEventListener('click', () => {
     $('#addItemModal').modal('show');
 });
 
-// Käsittelee lomakkeen lähetyksen uuden esineen lisäämistä varten
+
+
+// tavaran lisäys CHANGED!
 document.getElementById('add-item-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -40,12 +42,22 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
     };
 
     const token = localStorage.getItem('token'); // Olettaa tokenin olevan tallennettuna localStorageen
-    const config = {
-        headers: { Authorization: `Bearer ${token}` },
+    const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
     };
 
     try {
-        await axios.post('http://localhost:3003/api/items', itemToBeAdded, config);
+        const response = await fetch('http://localhost:3003/api/items', {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(itemToBeAdded), // Send the item data as a JSON string
+        });
+
+        if (!response.ok) {
+            throw new Error('Virhe tavaran lisäämisessä');
+        }
+
         $('#addItemModal').modal('hide'); // Sulkee modaalin
         fetchItems(); // Päivittää item listan
     } catch (error) {
@@ -102,21 +114,25 @@ function displayItems(items) {
     });
 }
 
-// Funktio joka hakee esineet käyttäen Axios:ta
 function fetchItems() {
-    axios.get('http://localhost:3003/api/items') // Esineiden API
-        .then(response => {
-            displayItems(response.data); // Siirrä haetut esineet näyttämisfunktiolle
-        })
-        .catch(error => {
-            console.error('Virhe tavaroiden hakemisessa:', error);
-            alert('Tavaroiden hakeminen epäonnistui');
-        });
+	fetch("http://localhost:3003/api/items") // Esineiden API
+		.then((response) => {
+			if (!response.ok) {
+				throw new Error("Tavaroiden hakeminen epäonnistui")
+			}
+			return response.json() // Parse the response as JSON
+		})
+		.then((data) => {
+			displayItems(data) // Siirrä haetut esineet näyttämisfunktiolle
+		})
+		.catch((error) => {
+			console.error("Virhe tavaroiden hakemisessa:", error)
+			alert("Tavaroiden hakeminen epäonnistui")
+		})
 }
 
 // Kutsuu fetchItems funktiota ladatakseen esineet sivun latauksen yhteydessä
 fetchItems();
-
 
 // Tämä koodi käsittelee käyttäjän klikkausta "my-items-button" -painikkeessa.
 // Se avaa modaalin ja lataa kohteet näyttöön käyttäen autentikointitunnusta,
@@ -127,14 +143,22 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
     container.innerHTML = '<p>Ladataan...</p>'; // Näyttää latausviestin
 
     const token = localStorage.getItem('token'); // Hakee auth-tunnuksen localStoragesta
-    const config = {
-        headers: { Authorization: `Bearer ${token}` },
+    const headers = {
+        'Authorization': `Bearer ${token}`,
     };
 
     try {
         // Hakee kaikki esineet API:sta
-        const response = await axios.get('http://localhost:3003/api/items', config);
-        const allItems = response.data;
+        const response = await fetch('http://localhost:3003/api/items', {
+            method: 'GET',
+            headers: headers,
+        });
+
+        if (!response.ok) {
+            throw new Error('Virhe esineiden hakemisessa');
+        }
+
+        const allItems = await response.json();
 
         // Purkaa tunnuksen saadakseen kirjautuneen käyttäjän ID:n
         const tokenPayload = JSON.parse(atob(token.split('.')[1]));
@@ -178,13 +202,16 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
             deleteButton.classList.add('btn', 'btn-danger');
             deleteButton.onclick = async () => {
                 try {
-                    const token = localStorage.getItem('token'); // Hakee tunnuksen localStoragesta
-                    const config = {
-                        headers: { Authorization: `Bearer ${token}` },
-                    };
-
                     // Tekee DELETE pyynnön käyttämällä "item.id" (ei "item._id")
-                    await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
+                    const deleteResponse = await fetch(`http://localhost:3003/api/items/${item.id}`, {
+                        method: 'DELETE',
+                        headers: headers,
+                    });
+
+                    if (!deleteResponse.ok) {
+                        throw new Error('Virhe esineen poistamisessa');
+                    }
+
                     // Kutsuu fetchItems, joka hakee ja renderöi esineet uudelleen
                     await fetchItems();
                     // Onnistuessa poistaa esineen DOM:ista (poistaa näkyvistä sivulla)
@@ -194,12 +221,10 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
                     console.error('Virhe esineen poistamisessa:', error);
 
                     // Tiettyjen virhevastauksien käsittely
-                    if (error.response && error.response.status === 403) {
-                        alert('Sinulla ei ole lupaa poistaa tätä esinettä');
-                    } else if (error.response && error.response.status === 404) {
-                        alert('Esinettä ei löytynyt.');
-                    } else {
+                    if (error.message === 'Virhe esineen poistamisessa') {
                         alert('Virhe tapahtui tavaran poistamisessa');
+                    } else {
+                        alert('Sinulla ei ole lupaa poistaa tätä esinettä tai esinettä ei löytynyt.');
                     }
                 }
             };
@@ -224,6 +249,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         container.innerHTML = '<p>Kohteiden lataaminen epäonnistui. Yritä myöhemmin uudelleen.</p>';
     }
 });
+
 
 // Asettaa modaalin näkyvyyden piiloon, jolloin se sulkeutuu
 document.querySelector('.close-btn').addEventListener('click', () => {
@@ -263,7 +289,11 @@ function openModal(item) {
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             // Lähettää DELETE pyynnön backendiin
-            await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
+            // await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
+            const deleteResponse = await fetch(`http://localhost:3003/api/items/${item.id}`, {
+                method: "DELETE",
+                headers: headers
+            })
 
             fetchItems();
 
@@ -289,7 +319,6 @@ function openModal(item) {
 
     // Sulkee modaalin kun käyttäjä klikkaa "Sulje" nappia
     closeButton.addEventListener('click', closeModal);
-
 }
 
 // Modaalin sulkemisfunktio
@@ -319,7 +348,11 @@ async function deleteItem(itemId, itemElement) {
     };
 
     try {
-        await axios.delete(`http://localhost:3003/api/items/${itemId}`, config);
+        // await axios.delete(`http://localhost:3003/api/items/${itemId}`, config);
+        const response = await fetch(`http://localhost:3003/api/items/${itemId}`, {
+            method: "DELETE",
+            headers: headers
+        })
         itemElement.remove(); // Poistaa esineen elemtin DOM:ista
         alert('Esine poistui onnistuneesti');
     } catch (error) {
