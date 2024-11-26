@@ -5,6 +5,7 @@ const loginRouter = require("express").Router()
 const User = require("../models/user")
 
 loginRouter.post("/", async (req, res) => {
+	console.log("POST req to api/login");
 	const { email, password } = req.body
 
 	const user = await User.findOne({ email })
