@@ -1,3 +1,25 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+
+    // Jos token puuttuu, ohjataan käyttäjä takaisin kirjautumissivulle
+    if (!token) {
+        alert("Sinun täytyy kirjautua sisään päästäksesi tälle sivulle.");
+        window.location.href = "login.html";
+    }
+
+    // Kirjaudu ulos -nappulan toiminnallisuus
+    const logoutButton = document.getElementById("logoutButton");
+    logoutButton.addEventListener("click", () => {
+        // Poistetaan token localStoragesta
+        localStorage.removeItem("token");
+
+        // Ohjataan käyttäjä takaisin kirjautumissivulle
+        alert("Olet kirjautunut ulos.");
+        window.location.href = "login.html";
+    });
+});
+
+
 // "Lisää uusi esine" näkymä aukeaa kun painetaan "Lisää Esine" nappia
 document.getElementById('add-item-button').addEventListener('click', () => {
     $('#addItemModal').modal('show');
