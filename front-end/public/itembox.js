@@ -27,8 +27,8 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
         $('#addItemModal').modal('hide'); // Sulkee modaalin
         fetchItems(); // Päivittää item listan
     } catch (error) {
-        console.error('Error adding item:', error);
-        alert('Failed to add item.');
+        console.error('Virhe tavaran lisäämisessä:', error);
+        alert('Epäonnistuminen tavaran lisäämisessä');
     }
 });
 
@@ -87,8 +87,8 @@ function fetchItems() {
             displayItems(response.data); // Siirrä haetut esineet näyttämisfunktiolle
         })
         .catch(error => {
-            console.error('Error fetching items:', error);
-            alert('Failed to load items.');
+            console.error('Virhe tavaroiden hakemisessa:', error);
+            alert('Tavaroiden hakeminen epäonnistui');
         });
 }
 
@@ -96,8 +96,8 @@ function fetchItems() {
 fetchItems();
 
 
-// Tämä koodi käsittelee käyttäjän klikkausta "my-items-button" -painikkeessa. 
-// Se avaa modaalin ja lataa kohteet näyttöön käyttäen autentikointitunnusta, 
+// Tämä koodi käsittelee käyttäjän klikkausta "my-items-button" -painikkeessa.
+// Se avaa modaalin ja lataa kohteet näyttöön käyttäen autentikointitunnusta,
 // joka haetaan localStoragesta. Latausviesti näytetään modaalin sisällä ennen tietojen hakemista.
 document.getElementById('my-items-button').addEventListener('click', async () => {
     const modal = document.getElementById('items-modal');
@@ -122,7 +122,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         const userItems = allItems.filter(item => item.user.id === currentUserId);
 
         if (userItems.length === 0) {
-            container.innerHTML = '<p>No items found.</p>';
+            container.innerHTML = '<p>Esinettä ei löytynyt.</p>';
             return;
         }
 
@@ -152,7 +152,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
 
             //Luo poista nappula
             const deleteButton = document.createElement('button');
-            deleteButton.textContent = 'Delete';
+            deleteButton.textContent = 'Poista';
             deleteButton.classList.add('btn', 'btn-danger');
             deleteButton.onclick = async () => {
                 try {
@@ -166,17 +166,17 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
 
                     // Onnistuessa poistaa esineen DOM:ista (poistaa näkyvistä sivulla)
                     itemDiv.remove();
-                    alert('Item deleted successfully!');
+                    alert('Esine poistettu!');
                 } catch (error) {
-                    console.error('Error deleting item:', error);
+                    console.error('Virhe esineen poistamisessa:', error);
 
                     // Tiettyjen virhevastauksien käsittely
                     if (error.response && error.response.status === 403) {
-                        alert('You are not authorized to delete this item.');
+                        alert('Sinulla ei ole lupaa poistaa tätä esinettä');
                     } else if (error.response && error.response.status === 404) {
-                        alert('Item not found.');
+                        alert('Esinettä ei löytynyt.');
                     } else {
-                        alert('An error occurred while deleting the item.');
+                        alert('Virhe tapahtui tavaran poistamisessa');
                     }
                 }
             };
@@ -197,8 +197,8 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         });
 
     } catch (error) {
-        console.error('Error fetching items:', error);
-        container.innerHTML = '<p>Failed to load items. Please try again later.</p>';
+        console.error('Virhe esineiden hakemisessa:', error);
+        container.innerHTML = '<p>Kohteiden lataaminen epäonnistui. Yritä myöhemmin uudelleen.</p>';
     }
 });
 
@@ -255,11 +255,11 @@ function openModal(item) {
 
             // Erilaisten virheiden käsittely
             if (error.response && error.response.status === 403) {
-                alert('You are not authorized to delete this item.');
+                alert('Sinulla ei ole lupaa poistaa tätä esinettä.');
             } else if (error.response && error.response.status === 404) {
-                alert('Item not found.');
+                alert('Esinettä ei löytynyt.');
             } else {
-                alert('An error occurred while deleting the item.');
+                alert('Virhe tapahtui esineen poistamisessa.');
             }
         }
     };
@@ -297,9 +297,9 @@ async function deleteItem(itemId, itemElement) {
     try {
         await axios.delete(`http://localhost:3003/api/items/${itemId}`, config);
         itemElement.remove(); // Poistaa esineen elemtin DOM:ista
-        alert('Item deleted successfully!');
+        alert('Esine poistui onnistuneesti');
     } catch (error) {
-        console.error('Error deleting item:', error);
-        alert('Failed to delete item.');
+        console.error('Virhe tavaran poistamisessa:', error);
+        alert('Epäonnistunut tavaran poisto');
     }
 }
