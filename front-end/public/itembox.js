@@ -1,3 +1,25 @@
+document.addEventListener("DOMContentLoaded", () => {
+    const token = localStorage.getItem("token");
+
+    // Jos token puuttuu, ohjataan käyttäjä takaisin kirjautumissivulle
+    if (!token) {
+        alert("Sinun täytyy kirjautua sisään päästäksesi tälle sivulle.");
+        window.location.href = "login.html";
+    }
+
+    // Kirjaudu ulos -nappulan toiminnallisuus
+    const logoutButton = document.getElementById("logoutButton");
+    logoutButton.addEventListener("click", () => {
+        // Poistetaan token localStoragesta
+        localStorage.removeItem("token");
+
+        // Ohjataan käyttäjä takaisin kirjautumissivulle
+        alert("Olet kirjautunut ulos.");
+        window.location.href = "login.html";
+    });
+});
+
+
 // "Lisää uusi esine" näkymä aukeaa kun painetaan "Lisää Esine" nappia
 document.getElementById('add-item-button').addEventListener('click', () => {
     $('#addItemModal').modal('show');
@@ -102,7 +124,7 @@ fetchItems();
 document.getElementById('my-items-button').addEventListener('click', async () => {
     const modal = document.getElementById('items-modal');
     const container = document.getElementById('modal-items-container');
-    container.innerHTML = '<p>Loading...</p>'; // Näyttää latausviestin
+    container.innerHTML = '<p>Ladataan...</p>'; // Näyttää latausviestin
 
     const token = localStorage.getItem('token'); // Hakee auth-tunnuksen localStoragesta
     const config = {
@@ -122,7 +144,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
         const userItems = allItems.filter(item => item.user.id === currentUserId);
 
         if (userItems.length === 0) {
-            container.innerHTML = '<p>Esinettä ei löytynyt.</p>';
+            alert('Esineitä ei löytynyt.');
             return;
         }
 
@@ -163,7 +185,8 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
 
                     // Tekee DELETE pyynnön käyttämällä "item.id" (ei "item._id")
                     await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
-
+                    // Kutsuu fetchItems, joka hakee ja renderöi esineet uudelleen
+                    await fetchItems();
                     // Onnistuessa poistaa esineen DOM:ista (poistaa näkyvistä sivulla)
                     itemDiv.remove();
                     alert('Esine poistettu!');
@@ -242,14 +265,14 @@ function openModal(item) {
             // Lähettää DELETE pyynnön backendiin
             await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
 
-            // Onnistuessa poistaa esineen DOM:ista eli näkyvistä
-            document.querySelector(`.item-box[data-id='${item.id}']`).remove();
+            fetchItems();
 
             // Sulkee modaalin poistamisen jälkeen
             closeModal();
 
             // Ilmoittaa onnistuneesta esineen poistamisesta
             alert('Esine poistettu!');
+
         } catch (error) {
             console.error('Virhe tavaran poistossa:', error);
 
@@ -266,6 +289,7 @@ function openModal(item) {
 
     // Sulkee modaalin kun käyttäjä klikkaa "Sulje" nappia
     closeButton.addEventListener('click', closeModal);
+
 }
 
 // Modaalin sulkemisfunktio
