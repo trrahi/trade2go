@@ -1,6 +1,6 @@
 console.log("Tämän pitäisi näkyä selaimen consolissa, että skripti toimii");
 
-// Login form submit
+// Kirjautumislomakkeen lähetys
 document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 	e.preventDefault()
 
@@ -33,7 +33,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 
 
 
-// Register form submit
+// Rekisteröintilomakkeen lähetys
 document.getElementById("registerForm")?.addEventListener("submit", function (e) {
 	e.preventDefault();
 
@@ -54,11 +54,11 @@ document.getElementById("registerForm")?.addEventListener("submit", function (e)
 			password: password
 		})
 		.then((response) => {
-			// Successful registration, redirect to login page
+			// Rekisteröinti onnistui, siirrytään kirjautumissivulle
 			window.location.href = "login.html";
 		})
 		.catch((error) => {
-			document.getElementById("registerError").textContent = "Registration failed. Try again.";
+			document.getElementById("registerError").textContent = "Rekisteröinti epäonnistui. Yritä uudelleen.";
 		});
 });
 

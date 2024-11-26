@@ -11,8 +11,8 @@
     </style>
 </head>
 <body>
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <!-- Navigointipalkki -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Vaihtoesineet</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -26,34 +26,32 @@
         </div>
     </nav>
 
-    <!-- "Add Item" button -->
+    <!-- "Lisää esine" nappi -->
     <div class="add-item-container">
-        <button class="btn btn-green" id="add-item-button">Lisää esine</button>
+        <button class="btn btn-green" id="add-item-button">Lisää Esine</button>
     </div>
 
-    <!-- "My Items" button -->
+    <!-- "Omat esineet" nappi -->
     <div class="my-items-container">
         <button class="btn btn-primary" id="my-items-button">Omat Esineet</button>
     </div>
 
-    <!-- Modal for displaying items -->
+    <!-- Näkymä jossa voi tarkastella ja poistaa omia esineitä -->
     <div id="items-modal" class="modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h3>Omat Esineet</h3>
             <div id="modal-items-container">
-                <!-- User items will be displayed here -->
             </div>
         </div>
     </div>
 
     <div class="container">
         <div class="item-grid" id="items-container">
-            <!-- Item boxes will be inserted here -->
         </div>
     </div>
 
-    <!-- Modal for adding a new item -->
+    <!-- Näkymä uuden esineen lisäämiselle -->
     <div class="modal fade" id="addItemModal" tabindex="-1" role="dialog" aria-labelledby="addItemModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -83,12 +81,10 @@
             </div>
         </div>
     </div>
-
+    <!-- Scriptit -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <!-- Link the external JavaScript file -->
     <script src="itembox.js"></script>
 
 </body>

@@ -16,6 +16,22 @@ body {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Keskitetään vain otsikko */
+.login-container h2 {
+    text-align: center; /* Keskittää vain h2-otsikon */
+}
+
+/* Kontti etusivulle */
+.container2 {
+    width: 300px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
 /* Lomakkeen sisällä olevat elementit */
 form label {
     display: block;
@@ -72,8 +88,7 @@ button:hover {
     gap: 10px; /* Välit nappien välille */
 }
 
-/* Item grid layout */
-/* Item grid layout */
+/* Esineiden ruudukkoasettelu */
 .item-grid {
     display: flex;
     flex-wrap: wrap;
@@ -82,7 +97,7 @@ button:hover {
     padding: 20px;
 }
 
-/* Set each item box to take up 30% of the width */
+/* Esinelaatikkojen leveys */
 .item-box {
     width: 30%; /* 3 boxes in each row */
     background-color: white;
@@ -91,16 +106,14 @@ button:hover {
     text-align: center;
 }
 
-/* Card image size */
 .card-img-top {
     background-color: #e0e0e0;
     width: 100%;
-    height: 200px; /* Adjusted height for a bigger image */
-    object-fit: cover; /* Makes the image cover the area */
+    height: 200px;
+    object-fit: cover;
     border-radius: 10px 10px 0 0;
 }
 
-/* Card body styling */
 .card-body {
     display: flex;
     flex-direction: column;
@@ -117,7 +130,7 @@ button:hover {
 .btn-green:hover {
     background-color: #218838;
 }
-
+/* Kuvan tyylitys */
 .item-image {
     max-width: 100%;
     height: auto;
