@@ -49,7 +49,7 @@ app.get("/register", (req, res) => {
     res.sendFile(path.join(__dirname, "../../front-end/public/register.html"))
 })
 
-app.get("/dashboard", authMiddleware, (req, res) => {
+app.get("/itembox", authMiddleware, (req, res) => {
     res.sendFile(path.join(__dirname, "../../front-end/public/itembox.html"))
 })
 

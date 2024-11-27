@@ -11,7 +11,7 @@ document.getElementById("loginForm")?.addEventListener("submit", function (e) {
 	const xhr = new XMLHttpRequest();
 
 	// Configure it: POST-request for the URL
-	xhr.open("POST", "http://localhost:3003/api/login", true);
+	xhr.open("POST", "https://trade2go.onrender.com/api/login", true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 
 	// Handle the response
@@ -87,12 +87,12 @@ document.getElementById("registerForm")?.addEventListener("submit", function (e)
 
 	const xhr = new XMLHttpRequest();
 
-	xhr.open("POST", "http://localhost:3003/api/users", true);
+	xhr.open("POST", "https://trade2go.onrender.com/api/users", true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 
 	xhr.onload = function () {
 		if (xhr.status === 200 || xhr.status === 201) {
-			window.location.href = "login.html";
+			window.location.href = "https://trade2go.onrender.com/login.html";
 		} else {
 			document.getElementById("registerError").textContent = "Rekisteröinti epäonnistui. Yritä uudfelleen";
 		}

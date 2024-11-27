@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Jos token puuttuu, ohjataan käyttäjä takaisin kirjautumissivulle
     if (!token) {
         alert("Sinun täytyy kirjautua sisään päästäksesi tälle sivulle.");
-        window.location.href = "login.html";
+        window.location.href = "https://trade2go.onrender.com/login.html";
     }
 
     // Kirjaudu ulos -nappulan toiminnallisuus
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Ohjataan käyttäjä takaisin kirjautumissivulle
         alert("Olet kirjautunut ulos.");
-        window.location.href = "login.html";
+        window.location.href = "https://trade2go.onrender.com/login.html";
     });
 });
 
@@ -27,7 +27,7 @@ document.getElementById('add-item-button').addEventListener('click', () => {
 
 
 
-// tavaran lisäys 
+// tavaran lisäys
 document.getElementById('add-item-form').addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -48,18 +48,18 @@ document.getElementById('add-item-form').addEventListener('submit', async (event
     };
 
     try {
-        const response = await fetch('http://localhost:3003/api/items', {
+        const response = await fetch('https://trade2go.onrender.com/api/items', {
             method: 'POST',
             headers: headers,
-            body: JSON.stringify(itemToBeAdded), 
+            body: JSON.stringify(itemToBeAdded),
         });
 
         if (!response.ok) {
             throw new Error('Virhe tavaran lisäämisessä');
         }
 
-        $('#addItemModal').modal('hide'); 
-        fetchItems(); 
+        $('#addItemModal').modal('hide');
+        fetchItems();
     } catch (error) {
         console.error('Virhe tavaran lisäämisessä:', error);
         alert('Epäonnistuminen tavaran lisäämisessä');
@@ -88,7 +88,7 @@ function displayItems(items) {
             const itemImage = document.createElement('img');
             itemImage.src = item.imgUrl;
             itemImage.alt = `${item.itemName} Image`;
-            itemImage.classList.add('item-image'); 
+            itemImage.classList.add('item-image');
             itemDiv.appendChild(itemImage);
         }
 
@@ -108,15 +108,15 @@ function displayItems(items) {
 }
 
 function fetchItems() {
-	fetch("http://localhost:3003/api/items")
+	fetch("https://trade2go.onrender.com/api/items")
 		.then((response) => {
 			if (!response.ok) {
 				throw new Error("Tavaroiden hakeminen epäonnistui")
 			}
-			return response.json() 
+			return response.json()
 		})
 		.then((data) => {
-			displayItems(data) 
+			displayItems(data)
 		})
 		.catch((error) => {
 			console.error("Virhe tavaroiden hakemisessa:", error)
@@ -133,15 +133,15 @@ fetchItems();
 document.getElementById('my-items-button').addEventListener('click', async () => {
     const modal = document.getElementById('items-modal');
     const container = document.getElementById('modal-items-container');
-    container.innerHTML = '<p>Ladataan...</p>'; 
+    container.innerHTML = '<p>Ladataan...</p>';
 
-    const token = localStorage.getItem('token'); 
+    const token = localStorage.getItem('token');
     const headers = {
         'Authorization': `Bearer ${token}`,
     };
 
     try {
-        const response = await fetch('http://localhost:3003/api/items', {
+        const response = await fetch('https://trade2go.onrender.com/api/items', {
             method: 'GET',
             headers: headers,
         });
@@ -163,7 +163,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
             return;
         }
 
-        container.innerHTML = ''; 
+        container.innerHTML = '';
 
         userItems.forEach(item => {
             const itemDiv = document.createElement('div');
@@ -193,7 +193,7 @@ document.getElementById('my-items-button').addEventListener('click', async () =>
             deleteButton.onclick = async () => {
                 try {
                     // Tekee DELETE pyynnön käyttämällä "item.id" (ei "item._id")
-                    const deleteResponse = await fetch(`http://localhost:3003/api/items/${item.id}`, {
+                    const deleteResponse = await fetch(`https://trade2go.onrender.com/api/items/${item.id}`, {
                         method: 'DELETE',
                         headers: headers,
                     });
@@ -258,24 +258,24 @@ function openModal(item) {
     const modalDesc = document.getElementById('modal-item-desc');
     const modalImg = document.getElementById('modal-item-img');
     const deleteButton = document.getElementById('modal-delete-btn');
-    const closeButton = document.querySelector('.close-btn'); 
+    const closeButton = document.querySelector('.close-btn');
 
     // Aseta modaalin sisältö sen esineen perusteella, joka on välitetty funktiolle
     modalName.textContent = item.itemName;
     modalDesc.textContent = item.itemDesc;
-    modalImg.src = item.imgUrl ? item.imgUrl : ''; 
+    modalImg.src = item.imgUrl ? item.imgUrl : '';
 
     modal.style.display = 'block';
 
     // Poistonapin käsittely klikattaessa
     deleteButton.onclick = async () => {
         try {
-            const token = localStorage.getItem('token'); 
+            const token = localStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}` } };
 
             // Lähettää DELETE pyynnön backendiin
             // await axios.delete(`http://localhost:3003/api/items/${item.id}`, config);
-            const deleteResponse = await fetch(`http://localhost:3003/api/items/${item.id}`, {
+            const deleteResponse = await fetch(`https://trade2go.onrender.com/api/items/${item.id}`, {
                 method: "DELETE",
                 headers: headers
             })
@@ -329,11 +329,11 @@ async function deleteItem(itemId, itemElement) {
     };
 
     try {
-        const response = await fetch(`http://localhost:3003/api/items/${itemId}`, {
+        const response = await fetch(`https://trade2go.onrender.com/api/items/${itemId}`, {
             method: "DELETE",
             headers: headers
         })
-        itemElement.remove(); 
+        itemElement.remove();
         alert('Esine poistui onnistuneesti');
     } catch (error) {
         console.error('Virhe tavaran poistamisessa:', error);
